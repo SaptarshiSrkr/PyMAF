@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.integrate import trapezoid
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
 from generate import gmm
 
@@ -49,14 +50,27 @@ for x in xs:        # x = constant
     y_ma_median.append(get_median_pdf(ys, p_y_gx))
     y_ma_mode.append(get_mode_pdf(ys, p_y_gx))
 
+dery_ma_mean   = np.diff(y_ma_mean)
+dery_ma_median = np.diff(y_ma_median)
+dery_ma_mode   = np.diff(y_ma_mode)
 
 # # plot
 plt.contourf(XX, YY, ZZ, levels=50, cmap="Blues")
-plt.plot(xs, y_ma_mean,   c="red", ls="-",  lw=1, label="mean")
-plt.plot(xs, y_ma_median, c="red", ls="--", lw=1, label="median")
-plt.plot(xs, y_ma_mode,   c="red", ls=":",  lw=1, label="mode")
+plt.plot(xs, y_ma_mean,   c="red", ls="-",  lw=1)
+plt.plot(xs, y_ma_median, c="red", ls="--", lw=1)
+plt.plot(xs, y_ma_mode,   c="red", ls=":",  lw=1)
+plt.plot(xs[:-1], np.abs(dery_ma_mean)-4,   c="green", ls="-",  lw=1)
+plt.plot(xs[:-1], np.abs(dery_ma_median)-4, c="green", ls="--", lw=1)
+plt.plot(xs[:-1], np.abs(dery_ma_mode)-4,   c="green", ls=":",  lw=1)
 plt.xlabel("x")
 plt.ylabel("y")
-plt.legend(loc=4)
+legends = [
+    Line2D([],[], color="black", ls="-",  lw=1, label="mean"),
+    Line2D([],[], color="black", ls="--", lw=1, label="median"),
+    Line2D([],[], color="black", ls=":",  lw=1, label="mode"),
+    Line2D([],[], color="red",   ls="-",  lw=1, label="MA"),
+    Line2D([],[], color="green", ls="-",  lw=1, label="derivative of MA"),
+]
+plt.legend(handles=legends, loc=2)
 plt.title("A toy dist - gaussian mixture model")
-plt.savefig("figs/moving_average3.svg", bbox_inches="tight")
+plt.savefig("figs/moving_average2.svg", bbox_inches="tight")
