@@ -5,7 +5,7 @@ from sklearn.mixture import GaussianMixture
 
 # params
 no_samples = 1000
-means = np.array([[0,0], [2.5,5], [4,7]])
+means = np.array([[0,0], [5,5], [10,7]])
 covariances = np.array([
     [[1, 0.5], [0.5, 1]],
     [[1, -0.3], [-0.3, 1]],
